@@ -2,10 +2,6 @@
 
 #### Lightweight wearable-sensor classification and real-time BLE cursor interaction
 
-> Code accompanying **[MANUSCRIPT TITLE]**, submitted to *Nature Sensors*.
-
-<!-- Before public release: replace bracketed fields, add the model figure, and verify all checkpoint/data paths. -->
-
 ## Overview
 
 This repository provides the code used to train and evaluate a compact one-dimensional convolutional neural network for wearable-sensor gesture classification, together with a Bluetooth Low Energy (BLE) demonstration that converts real-time predictions into cursor actions.
