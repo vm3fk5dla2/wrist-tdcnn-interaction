@@ -6,9 +6,9 @@ import os
 class Params:
 
     train_dir: str = "examples/data_classification/train"
-    validate_dir: str = "examples/data_classification//valid"
-    test_dir: str = "examples/data_classification//test"
-    model_dir: str = "model_log"
+    validate_dir: str = "examples/data_classification/valid"
+    test_dir: str = "examples/data_classification/test"
+    model_dir: str = "examples/models"
 
     best_model_filename: str = "best_model_classification.pth"
     top_model_filename: str = "top_model_{}_{}.pth"
