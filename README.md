@@ -63,7 +63,21 @@ conda env create -f environments.yaml
 conda activate <ENVIRONMENT_NAME>
 ```
 
-Run all commands below from the repository root. The environment must include PyTorch, NumPy, pandas, Bleak, Pillow, and Tkinter support. A CUDA-capable GPU is used automatically when available; CPU execution is also supported.
+Run all commands below from the repository root. The pipeline scripts import `models`, `preprocessing`, and `configs` from that root, so expose it on `PYTHONPATH` before using direct `.py` execution.
+
+Linux or macOS:
+
+```bash
+export PYTHONPATH="$(pwd)"
+```
+
+Windows PowerShell:
+
+```powershell
+$env:PYTHONPATH = (Get-Location).Path
+```
+
+The environment must include PyTorch, NumPy, pandas, Bleak, Pillow, and Tkinter support. A CUDA-capable GPU is used automatically when available; CPU execution is also supported.
 
 ## Data preparation
 
@@ -97,7 +111,7 @@ Dataset paths and preprocessing/training parameters can be changed in `configs/f
 The `model_log/` directory is intentionally absent before the first run. It is created automatically by the training pipeline.
 
 ```bash
-python -m pipelines.flexion_extension_classification_train
+python pipelines/flexion_extension_classification_train.py
 ```
 
 The principal output is:
@@ -105,6 +119,14 @@ The principal output is:
 ```text
 model_log/best_model_classification.pth
 ```
+
+<!-- Upload the manuscript figure to assets/model_architecture.png. -->
+<p align="center">
+  <img src="assets/model_architecture.png" width="900" alt="Architecture of the compact 1D-CNN classification model">
+</p>
+<p align="center">
+  <em>Figure 1. Architecture of the compact 1D-CNN classification model.</em>
+</p>
 
 The checkpoint is updated whenever validation accuracy matches or exceeds the previous best value. With the default configuration, training can also save up to five models whose validation accuracy reaches the early-stopping threshold:
 
@@ -118,10 +140,10 @@ The current training script does not print an epoch-by-epoch log. For a manuscri
 
 By default, offline inference loads `model_log/best_model_classification.pth` and evaluates all files in `examples/data_classification/test/`.
 
-The inference function returns accuracy and average cross-entropy loss but does not print them when the script is launched directly. Use:
+Run the evaluation script directly:
 
 ```bash
-python -c "from pipelines.flexion_extension_classification_offline_inference import main; accuracy, loss = main(); print(f'Test accuracy: {accuracy:.2f}%'); print(f'Test loss: {loss:.4f}')"
+python pipelines/flexion_extension_classification_offline_inference.py
 ```
 
 To evaluate the released checkpoint in `checkpoints/`, either copy it to `model_log/best_model_classification.pth` or update the checkpoint path in `configs/flexion_extension_classification_parameters.py`.
@@ -136,7 +158,7 @@ The cursor-control pipeline requires a BLE sensor device and a **separate two-ch
 4. Start the demonstration from the repository root:
 
 ```bash
-python -m pipelines.cursor_control
+python pipelines/cursor_control.py
 ```
 
 At startup, the application connects to the BLE device, displays a 45-second waiting screen, and then collects 15 seconds of data to estimate per-channel normalization ranges. Live predictions are subsequently interpreted as rest (`0`), left (`1`), right (`2`), or pinch (`3`). Selected BLE channels are also written asynchronously to the directory specified by `CSV_LOG_DIR` in `pipelines/cursor_control.py`.
@@ -160,14 +182,6 @@ Input
 ```
 
 The offline model uses `5→16→32` convolutional channels and a 10-class output layer (2,250 trainable parameters). The cursor model uses `2→16→32` convolutional channels and a 4-class output layer (1,908 trainable parameters).
-
-<p align="center"><em>[Model architecture figure placeholder — upload the final figure as <code>assets/model_architecture.png</code>.]</em></p>
-
-<!-- Replace the placeholder above with the following after uploading the figure:
-<p align="center">
-  <img src="assets/model_architecture.png" width="900" alt="Architecture of the compact 1D-CNN models">
-</p>
--->
 
 ## Reproducibility notes
 
