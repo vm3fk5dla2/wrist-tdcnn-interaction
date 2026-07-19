@@ -10,7 +10,7 @@ class Params:
 
 
     # directories
-    model_dir: str = "examples/models"
+    model_dir: str = "checkpoints/released"
 
 
     # model filenames

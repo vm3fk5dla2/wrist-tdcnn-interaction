@@ -1,7 +1,9 @@
+import argparse
+import os
+
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-import os
 
 from models.flexion_extension_classification_model import UltraLightCNN1D
 from preprocessing.flexion_extension_classification_preprocessing import SensorDataset
@@ -41,11 +43,18 @@ def validate(device, model, validate_sensor_dataLoader, criterion):
     return overall_accuracy, average_loss
 
 
-def main ():
+def main (checkpoint_path = None):
     device = torch.device ('cuda' if torch.cuda.is_available () else 'cpu')
     torch.cuda.empty_cache ()
 
     params = Params()
+    checkpoint_path = checkpoint_path or params.released_checkpoint_path
+
+    if not os.path.isfile(checkpoint_path):
+        raise FileNotFoundError(
+            f"Checkpoint not found: {checkpoint_path}. "
+            "Use --checkpoint to select another compatible checkpoint."
+        )
 
     validate_sensor_dataset = SensorDataset (params)
     for file_name in os.listdir (params.test_dir):
@@ -61,12 +70,29 @@ def main ():
                                              )
 
     model = UltraLightCNN1D ().to (device)
-    model.load_state_dict(torch.load(params.best_model_path, map_location = device))
+    model.load_state_dict(torch.load(checkpoint_path, map_location = device))
 
     criterion = nn.CrossEntropyLoss ()
 
     return validate (device, model, validate_sensor_dataLoader, criterion)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description = "Evaluate the flexion/extension classification model."
+    )
+    parser.add_argument(
+        "--checkpoint",
+        type = str,
+        default = None,
+        help = (
+            "Path to a compatible checkpoint. Defaults to "
+            "checkpoints/released/best_model_classification.pth."
+        ),
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    main ()
+    args = parse_args()
+    main(checkpoint_path = args.checkpoint)

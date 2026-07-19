@@ -65,7 +65,7 @@ def main ():
 
     params = Params()
 
-    os.makedirs(params.model_dir, exist_ok = True)
+    os.makedirs(params.training_output_dir, exist_ok = True)
 
     model = UltraLightCNN1D ().to (device)
 
@@ -108,7 +108,7 @@ def main ():
             acc = validate (device, model, validate_sensor_dataLoader)
 
             if acc >= best_accuracy:
-                torch.save (model.state_dict (), params.best_model_path)
+                torch.save (model.state_dict (), params.training_best_model_path)
                 best_accuracy = acc
                 best_epoch = epoch + 1
 
@@ -119,10 +119,10 @@ def main ():
                     break
 
         for (deep_copied_model, acc, epoch) in top_five_acc_models:
-            torch.save (deep_copied_model.state_dict (), params.top_model_path(acc, epoch + 1))
+            torch.save (deep_copied_model.state_dict (), params.training_top_model_path(acc, epoch + 1))
 
     except KeyboardInterrupt:
-        torch.save (model.state_dict(), params.interrupted_model_path(best_epoch))
+        torch.save (model.state_dict(), params.training_interrupted_model_path(best_epoch))
 
 
 if __name__ == "__main__":
