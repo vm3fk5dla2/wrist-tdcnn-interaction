@@ -165,6 +165,7 @@ ble_characteristic_uuid = "YOUR_BLE_DEVICE_UUID"
 ble_device_address = "YOUR_BLE_DEVICE_ADDRESS"
 selected_channels = (2, 1)
 ```
+It is necessary to modify the settings above to suit your local machine if you wish to run the cursor-control pipeline.
 
 The cursor-control pipeline uses:
 
