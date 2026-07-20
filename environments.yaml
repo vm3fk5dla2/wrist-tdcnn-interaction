@@ -1,19 +1,15 @@
-name: wrist_based_gesture_recognition
+name: wrist_tdcnn
 channels:
   - pytorch
   - defaults
 dependencies:
   - python=3.9.13
   - pytorch=1.12.1
-  - pytorch-mutex=1.0=cuda
   - cudatoolkit=11.3
   - numpy=1.23.1
   - pillow=9.2.0
   - tk=8.6.12
   - pip
   - pip:
-      - attrs==22.1.0
       - bleak==0.22.3
-      - 'bleak-winrt==1.2.0; platform_system == "Windows"'
       - pandas==2.2.2
-      - tqdm==4.64.1
