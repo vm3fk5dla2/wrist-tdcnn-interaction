@@ -204,17 +204,6 @@ The classification model uses `5→16→32` convolutional channels and a 10-clas
 
 See `LICENSE` for the terms governing use and redistribution of this code.
 
-## Citation
-
-```bibtex
-@article{<CITATION_KEY>,
-  title   = {<MANUSCRIPT_TITLE>},
-  author  = {<AUTHORS>},
-  journal = {Nature Sensors},
-  year    = {<YEAR>}
-}
-```
-
 ## Contact
 
 **[CORRESPONDING AUTHOR]** — [EMAIL ADDRESS]
